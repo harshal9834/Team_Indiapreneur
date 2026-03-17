@@ -1,0 +1,13 @@
+flask==3.0.3
+flask-cors==4.0.1
+transformers==4.40.0
+torch==2.2.2
+torchvision==0.17.2
+Pillow==10.3.0
+gradio==4.44.1
+opencv-python==4.10.0.84
+matplotlib==3.9.2
+librosa==0.10.2
+soundfile==0.12.1
+static-ffmpeg==2.7.1
+numpy==1.26.4

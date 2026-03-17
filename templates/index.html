@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verionyx AI – Enterprise Deepfake Detection & Digital Trust Platform</title>
+  <meta name="description" content="Professional-grade AI forensic analysis and digital trust verification." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css?v=7.0" />
+</head>
+
+<body>
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">🛡️</span>
+          <span class="logo-text">Verionyx <span class="text-accent">AI</span></span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="nav-item active" data-view="dashboard">
+            <span class="nav-icon">📊</span> Dashboard
+          </li>
+          <li class="nav-item" data-view="analysis">
+            <span class="nav-icon">🔍</span> Media Analysis
+          </li>
+          <li class="nav-item" data-view="history">
+            <span class="nav-icon">📜</span> Audit Logs
+          </li>
+          <li class="nav-item" data-view="reports">
+            <span class="nav-icon">📈</span> Risk Reports
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="nav-item" data-view="settings">
+          <span class="nav-icon">⚙️</span> Settings
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <!-- TOP NAV -->
+      <header class="top-nav">
+        <div class="breadcrumb">
+          <span class="crumb-parent">Media Analysis</span>
+          <span class="crumb-separator">/</span>
+          <span class="crumb-current">Live Forensic Scan</span>
+        </div>
+        <div class="top-nav-actions">
+          <div class="status-indicator">
+            <span class="status-dot pulse"></span>
+            <span class="status-text">Engine: Active</span>
+          </div>
+          <button class="icon-btn tooltip" title="Notifications">🔔</button>
+          <div class="user-profile">
+            <div class="user-avatar">JD</div>
+            <span class="user-name">Enterprise Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- DASHBOARD BODY -->
+      <main class="dashboard-body">
+        <div class="dashboard-grid">
+          <!-- LEFT COLUMN: INPUT -->
+          <div class="column-left">
+            <div class="card upload-card">
+              <div class="card-header">
+                <h3><span class="card-icon">📁</span> Upload Media</h3>
+                <span class="badge">IMG / VID / AUD</span>
+              </div>
+              <div class="upload-container" id="dropZone">
+                <input type="file" id="fileInput" class="hidden" accept="image/*,video/*,audio/*" />
+
+                <div class="upload-idle" id="uploadIdle">
+                  <div class="upload-art">📥</div>
+                  <p class="primary-text">Drag & Drop Forensic Data</p>
+                  <p class="secondary-text">or click to browse local files</p>
+                </div>
+
+                <div class="upload-preview hidden" id="uploadPreview">
+                  <div class="preview-stage" id="previewContainer">
+                    <img id="previewImg" class="hidden" src="" alt="Preview" />
+                    <video id="previewVid" class="hidden" src="" controls></video>
+                    <audio id="previewAud" class="hidden" src="" controls></audio>
+                  </div>
+                  <div class="file-meta">
+                    <span class="filename" id="previewFilename">file_name.jpg</span>
+                    <button class="text-btn" id="changeBtn">Replace</button>
+                  </div>
+                </div>
+              </div>
+              <button class="primary-btn full-width" id="analyzeBtn" disabled>
+                Initialize Neural Analysis
+              </button>
+            </div>
+
+            <div class="card meta-info-card">
+              <div class="card-header">
+                <h3><span class="card-icon">📊</span> System Metrics</h3>
+              </div>
+              <div class="metrics-grid">
+                <div class="metric-item">
+                  <span class="met-label">Processing Time</span>
+                  <span class="met-value" id="procTime">—</span>
+                </div>
+                <div class="metric-item">
+                  <span class="met-label">Analysis Engine</span>
+                  <span class="met-value" id="engineName">TR-EfficientNet-V3</span>
+                </div>
+                <div class="metric-item">
+                  <span class="met-label">Model Confidence</span>
+                  <span class="met-value" id="confValue">—</span>
+                </div>
+                <div class="metric-item">
+                  <span class="met-label">Trust Score</span>
+                  <span class="met-value" id="trustScore">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: RESULTS -->
+          <div class="column-right">
+            <!-- Initial State -->
+            <div class="empty-state" id="initialState">
+              <div class="empty-icon">📂</div>
+              <h3>Awaiting Input</h3>
+              <p>Upload a file to begin the deepfake forensic verification process.</p>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state hidden" id="loaderCard">
+              <div class="loader-visual">
+                <div class="scanner-line"></div>
+                <div class="binary-stream"></div>
+              </div>
+              <h3>Analyzing Neural Layers</h3>
+              <p>Checking for facial inconsistencies & synthetic artifacts...</p>
+            </div>
+
+            <!-- Result Content -->
+            <div class="result-content hidden" id="resultCard">
+              <!-- 🔴 1. FINAL VERDICT HEADER -->
+              <div class="card verdict-card" id="verdictCard">
+                <div class="verdict-header-content">
+                  <h2 id="verdictTitle">Authentic Content ✅</h2>
+                  <p id="confidenceStatement">Confidence: 99.8% — Content appears consistent with organic media</p>
+                  <button class="primary-btn"
+                    style="margin-top: 15px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);"
+                    onclick="downloadDetailedReport()">
+                    📥 Download Detailed Forensic PDF
+                  </button>
+                </div>
+              </div>
+
+              <!-- 📊 2. SUMMARY CARDS -->
+              <div class="summary-stats-grid">
+                <div class="stat-card">
+                  <span class="stat-label">Prediction</span>
+                  <span class="stat-value" id="statPrediction">REAL</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">Confidence</span>
+                  <span class="stat-value" id="statConfidence">99%</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">Risk Level</span>
+                  <span class="stat-value" id="statRisk">LOW</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">Trust Score</span>
+                  <span class="stat-value" id="statTrust">100</span>
+                </div>
+              </div>
+
+              <!-- 📈 3. CONFIDENCE METER (Fake Signal Strength) -->
+              <div class="card meter-card">
+                <div class="card-header">
+                  <h3><span class="card-icon">📊</span> Fake Signal Strength</h3>
+                </div>
+                <div class="meter-content">
+                  <div class="meter-bar-container">
+                    <div id="signalMeterFill" class="meter-fill" style="width: 10%"></div>
+                  </div>
+                  <div class="meter-labels">
+                    <span>0% (Organic)</span>
+                    <span id="signalValue">10%</span>
+                    <span>100% (Synthetic)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 🖼️/🎧 4. FEATURE ANALYSIS -->
+              <div class="card feature-analysis-card">
+                <div class="card-header">
+                  <h3><span class="card-icon">🔍</span> Forensic Feature Analysis</h3>
+                </div>
+                <div class="feature-analysis-body" id="featureList">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- 📋 5. FEATURE TABLE -->
+              <div class="card table-card">
+                <div class="card-header">
+                  <h3><span class="card-icon">📋</span> Technical Feature Metrics</h3>
+                </div>
+                <div class="table-container">
+                  <table class="forensic-table">
+                    <thead>
+                      <tr>
+                        <th>Feature</th>
+                        <th>Value</th>
+                        <th>Interpretation</th>
+                      </tr>
+                    </thead>
+                    <tbody id="featureTableBody">
+                      <!-- Dynamically populated -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- 🧠 6. MODEL INSIGHTS -->
+              <div class="card model-insights-card">
+                <div class="card-header">
+                  <h3><span class="card-icon">🧠</span> Deep Learning Layer Insights</h3>
+                </div>
+                <div class="insights-body">
+                  <div class="insight-block">
+                    <span class="insight-badge">CNN Layer Analysis</span>
+                    <p id="cnnInsightText">Detected spatial anomalies in texture and edge patterns...</p>
+                  </div>
+                  <div class="insight-block">
+                    <span class="insight-badge">Temporal Analysis</span>
+                    <p id="temporalInsightText">Signal continuity analysis confirms organic temporal flow...</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 🔍 7. KEY OBSERVATIONS -->
+              <div class="card observations-card">
+                <div class="card-header">
+                  <h3><span class="card-icon">👁️</span> Key Forensic Observations</h3>
+                </div>
+                <ul class="observations-list" id="observationsList">
+                  <!-- Dynamically populated -->
+                </ul>
+              </div>
+
+              <!-- 🧾 8. FINAL EXPLANATION -->
+              <div class="card explanation-card">
+                <div class="card-header">
+                  <h3><span class="card-icon">📝</span> Final Forensic Interpretation</h3>
+                </div>
+                <div class="explanation-body">
+                  <p id="finalExplanationText">The analysis found high consistency in structural geometry...</p>
+                </div>
+              </div>
+
+              <!-- ⚠️ 9. RECOMMENDATION ENGINE -->
+              <div class="card recommendation-card" id="recommendationCard">
+                <div class="card-header">
+                  <h3><span class="card-icon">🛡️</span> Recommendation Engine</h3>
+                </div>
+                <ul class="rec-list" id="recList">
+                  <!-- Added by script -->
+                </ul>
+              </div>
+
+              <!-- 📌 10. SYSTEM TAGS -->
+              <div class="card tags-card">
+                <div class="tags-body" id="systemTags">
+                  <!-- Tags added here -->
+                </div>
+              </div>
+
+              <!-- Visualization Section -->
+              <div class="card visualization-card">
+                <div class="card-header">
+                  <h3><span class="card-icon">🖼️</span> Internal Evidence Visualization</h3>
+                  <div class="toggle-control">
+                    <span>Heatmap Overlay</span>
+                    <label class="switch">
+                      <input type="checkbox" id="heatmapToggle" checked>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="visualization-stage">
+                  <div class="visual-wrap">
+                    <img id="originalView" src="" alt="Forensic View">
+                    <img id="heatmapOverlay" src="" alt="Heatmap Overlay" class="heatmap-overlay">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tech Attribution (Engines) -->
+              <div class="card attribution-card">
+                <div class="card-header">
+                  <h3><span class="card-icon">⚙️</span> Core Analysis Engines</h3>
+                </div>
+                <div class="attribution-body" id="techStackList">
+                  <!-- Added by script -->
+                </div>
+                <!-- Session Audit Log -->
+                <div class="card audit-card">
+                  <div class="card-header">
+                    <h3><span class="card-icon">🕒</span> Session Analysis History</h3>
+                    <button class="text-btn" onclick="downloadReport()">Export CSV</button>
+                    <button class="primary-btn" style="margin-top: 10px; padding: 10px 20px; font-size: 0.9rem;"
+                      onclick="downloadPDF()">Download PDF Report</button>
+                  </div>
+                  <div class="table-container">
+                    <table class="audit-table">
+                      <thead>
+                        <tr>
+                          <th>Timestamp</th>
+                          <th>File Name</th>
+                          <th>Verdict</th>
+                          <th>Risk Status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="auditTrail">
+                        <!-- Dynamically populated by script.js -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <button class="secondary-btn full-width" id="resetBtn">Initiate New Scan Session</button>
+              </div>
+            </div>
+          </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/static/script.js?v=7.0"></script>
+</body>
+
+</html>
