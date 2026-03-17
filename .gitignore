@@ -29,13 +29,8 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Large Models/Data
-*.pt
-*.pth
-*.bin
-*.model
-DeepfakeDetector_Temp/
-report.json
-report.csv
-report.pdf
-forensic_report_*.pdf
+# Reports/Temp (Keep models and datasets for "overall" push)
+# report.json
+# report.csv
+# report.pdf
+# forensic_report_*.pdf
