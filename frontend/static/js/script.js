@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const startTime = Date.now();
-      const response = await fetch('/detect', { method: 'POST', body: formData });
+      const response = await fetch(`${API_BASE_URL}/detect`, { method: 'POST', body: formData });
       const data = await response.json();
       
       if (response.ok) {
@@ -279,23 +279,97 @@ document.addEventListener('DOMContentLoaded', () => {
        Usually audit persists in enterprise apps until logout/refresh. */
   });
 
-  /* View Switching (Placeholder for Sidebar) */
+  /* View Switching Logic */
+  window.switchView = function(viewId) {
+    // Hide all sections
+    document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden'));
+    
+    // Show target section
+    const target = document.getElementById(`view-${viewId}`);
+    if (target) {
+      target.classList.remove('hidden');
+    }
+
+    // Update active nav item
+    document.querySelectorAll('.nav-item').forEach(i => {
+      i.classList.toggle('active', i.dataset.view === viewId);
+    });
+
+    // Update breadcrumbs
+    const breadcrumbParent = document.getElementById('breadcrumbParent');
+    const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+    
+    const viewNames = {
+      'dashboard': { p: 'Media Analysis', c: 'Live Forensic Scan' },
+      'analysis': { p: 'Media Analysis', c: 'Deep Forensic Probe' },
+      'history': { p: 'Audit Center', c: 'Scan Registry' },
+      'reports': { p: 'Enterprise', c: 'Risk Compliance' },
+      'settings': { p: 'System', c: 'Account Configuration' }
+    };
+
+    if (viewNames[viewId]) {
+      breadcrumbParent.textContent = viewNames[viewId].p;
+      breadcrumbCurrent.textContent = viewNames[viewId].c;
+    }
+
+    // Close profile dropdown if switching view
+    document.getElementById('profileDropdown').classList.add('hidden');
+    
+    // If switching to history, sync with audit trail?
+    if (viewId === 'history') {
+      const fullAudit = document.getElementById('fullAuditTrail');
+      fullAudit.innerHTML = auditTrail.innerHTML;
+    }
+
+    // Update settings if needed
+    if (viewId === 'settings' && Auth.user) {
+        document.getElementById('settingsName').value = Auth.user.name;
+    }
+  };
+
+  window.toggleProfileMenu = function(e) {
+    if (e) e.stopPropagation();
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown.classList.toggle('hidden');
+  };
+
+  window.saveUserSettings = async function() {
+    const newName = document.getElementById('settingsName').value;
+    if (!newName) return alert('Name cannot be empty');
+    
+    // In a real app, we'd call /api/user/update
+    // For now, let's just update local storage and UI
+    Auth.user.name = newName;
+    localStorage.setItem('user', JSON.stringify(Auth.user));
+    Auth.updateUI();
+    alert('Settings saved successfully!');
+  };
+
+  /* Event Listeners for Nav */
   document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
+      const view = item.dataset.view;
+      if (view) switchView(view);
     });
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const profile = document.getElementById('userProfile');
+    if (profile && !profile.contains(e.target)) {
+      document.getElementById('profileDropdown').classList.add('hidden');
+    }
   });
 });
 
 function downloadReport() {
-  window.open("/download-report-csv", "_blank");
+  window.open(`${API_BASE_URL}/download-report-csv`, "_blank");
 }
 
 function downloadPDF() {
-  window.open("/download-report-pdf", "_blank");
+  window.open(`${API_BASE_URL}/download-report-pdf`, "_blank");
 }
 
 function downloadDetailedReport() {
-  window.open("/download-latest-report", "_blank");
+  window.open(`${API_BASE_URL}/download-latest-report`, "_blank");
 }

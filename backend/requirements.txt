@@ -1,0 +1,16 @@
+flask
+flask-cors
+torch
+torchvision
+transformers
+opencv-python
+numpy
+pillow
+librosa
+static-ffmpeg
+fpdf
+flask-jwt-extended
+pymongo
+dnspython
+bcrypt
+gunicorn

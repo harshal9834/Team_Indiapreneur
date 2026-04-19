@@ -11,7 +11,64 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="/static/style.css?v=7.0" />
+  <link rel="stylesheet" href="static/css/style.css?v=7.0" />
+  <style>
+    /* Auth Button Styles */
+    .auth-btn-group { display: flex; gap: 10px; }
+    .auth-btn { 
+      padding: 8px 16px; 
+      border-radius: 8px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: all 0.2s;
+      border: none;
+    }
+    .auth-btn.sign-in { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .auth-btn.sign-up { background: var(--color-accent, #16a085); color: white; }
+    .auth-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    
+    .logout-link {
+      background: none;
+      border: none;
+      color: #ff4747;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 0;
+      text-align: left;
+    }
+    .user-info-stack { display: flex; flex-direction: column; line-height: 1.2; text-align: left; }
+    .user-role { font-size: 0.75rem; color: #94a3b8; }
+    
+    .profile-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: #1e293b;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 10px;
+      min-width: 200px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
+      z-index: 1000;
+      margin-top: 10px;
+    }
+    .profile-dropdown.hidden { display: none; }
+    .dropdown-header { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 5px; }
+    .dropdown-email { font-size: 0.8rem; color: #94a3b8; word-break: break-all; }
+    .dropdown-list { list-style: none; padding: 0; margin: 0; }
+    .dropdown-list li {
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .dropdown-list li:hover { background: rgba(255,255,255,0.05); }
+    .logout-item { color: #ff4747; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px !important; border-radius: 0 0 8px 8px !important; }
+    
+    .view-section { transition: opacity 0.3s ease; }
+    .view-section.hidden { display: none; opacity: 0; }
+  </style>
 </head>
 
 <body>
@@ -51,9 +108,9 @@
       <!-- TOP NAV -->
       <header class="top-nav">
         <div class="breadcrumb">
-          <span class="crumb-parent">Media Analysis</span>
+          <span class="crumb-parent" id="breadcrumbParent">Media Analysis</span>
           <span class="crumb-separator">/</span>
-          <span class="crumb-current">Live Forensic Scan</span>
+          <span class="crumb-current" id="breadcrumbCurrent">Live Forensic Scan</span>
         </div>
         <div class="top-nav-actions">
           <div class="status-indicator">
@@ -61,15 +118,27 @@
             <span class="status-text">Engine: Active</span>
           </div>
           <button class="icon-btn tooltip" title="Notifications">🔔</button>
-          <div class="user-profile">
+          <div class="user-profile" id="userProfile" onclick="toggleProfileMenu()">
             <div class="user-avatar">JD</div>
-            <span class="user-name">Enterprise Admin</span>
+            <div class="user-info-stack">
+              <span class="user-name">Enterprise Admin</span>
+              <span class="user-role">Administrator</span>
+            </div>
+            <div class="profile-dropdown hidden" id="profileDropdown">
+              <div class="dropdown-header">
+                <p class="dropdown-email" id="userEmail">admin@verionyx.ai</p>
+              </div>
+              <ul class="dropdown-list">
+                <li onclick="switchView('settings')">⚙️ Settings</li>
+                <li onclick="Auth.logout()" class="logout-item">🚪 Logout</li>
+              </ul>
+            </div>
           </div>
         </div>
       </header>
 
-      <!-- DASHBOARD BODY -->
-      <main class="dashboard-body">
+      <!-- VIEW CONTAINERS -->
+      <main class="dashboard-body view-section" id="view-dashboard">
         <div class="dashboard-grid">
           <!-- LEFT COLUMN: INPUT -->
           <div class="column-left">
@@ -342,11 +411,79 @@
               </div>
             </div>
           </div>
+        </div>
+      </main>
+
+      <!-- ADDITIONAL VIEW SECTIONS -->
+      <main class="dashboard-body view-section hidden" id="view-history">
+        <div class="card">
+          <div class="card-header">
+            <h3><span class="card-icon">📜</span> Extended Audit History</h3>
+          </div>
+          <div class="table-container">
+            <table class="audit-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>File Name</th>
+                  <th>Verdict</th>
+                  <th>Risk Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="fullAuditTrail">
+                <!-- Populated by script.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <main class="dashboard-body view-section hidden" id="view-reports">
+        <div class="card">
+          <div class="card-header">
+            <h3><span class="card-icon">📈</span> Risk & Compliance Reports</h3>
+          </div>
+          <div class="placeholder-content" style="padding: 40px; text-align: center; color: #94a3b8;">
+            <p>Generate comprehensive forensic analysis reports for legal and enterprise compliance.</p>
+            <button class="primary-btn" style="margin-top: 20px;" onclick="downloadPDF()">Download Latest PDF Report</button>
+          </div>
+        </div>
+      </main>
+
+      <main class="dashboard-body view-section hidden" id="view-settings">
+        <div class="card">
+          <div class="card-header">
+            <h3><span class="card-icon">⚙️</span> Account & System Settings</h3>
+          </div>
+          <div class="settings-grid" style="padding: 20px; display: grid; gap: 30px;">
+            <div class="settings-group">
+                <h4>Profile Information</h4>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label class="form-label">Display Name</label>
+                    <input type="text" id="settingsName" class="form-input" style="max-width: 400px; display: block; margin-top: 5px;">
+                </div>
+                <button class="primary-btn" style="margin-top: 10px;" onclick="saveUserSettings()">Save Changes</button>
+            </div>
+
+            <div class="settings-group">
+                <h4>Engine Configuration</h4>
+                <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; max-width: 400px;">
+                    <span>Real-time Scanning</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   </div>
 
-  <script src="/static/script.js?v=7.0"></script>
+  <script src="static/js/auth.js"></script>
+  <script src="static/js/script.js?v=7.0"></script>
 </body>
 
 </html>
