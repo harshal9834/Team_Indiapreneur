@@ -225,10 +225,9 @@
         <a href="/" class="back-link">← Return to dashboard</a>
     </div>
 
+    <script src="static/js/config.js"></script>
     <script src="static/js/auth.js"></script>
     <script>
-        const BASE_URL = window.location.origin;
-
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('name').value;
@@ -242,7 +241,7 @@
             errorMsg.style.display = 'none';
 
             try {
-                const response = await fetch(`${BASE_URL}/api/auth/register`, {
+                const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, password })

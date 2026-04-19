@@ -12,7 +12,8 @@ def create_app():
     app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
     
     # Enable CORS
-    CORS(app, supports_credentials=True)
+    from .config import CORS_ALLOWED_ORIGINS
+    CORS(app, supports_credentials=True, origins=CORS_ALLOWED_ORIGINS)
 
     # JWT Configuration
     app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY

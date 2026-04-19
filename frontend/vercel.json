@@ -1,9 +1,10 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
+  "version": 2,
+  "name": "verionyx-frontend",
+  "public": true,
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/login", "destination": "/login.html" },
-    { "source": "/signup", "destination": "/signup.html" }
-  ]
+    { "source": "/(.*)", "destination": "/$1" }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
 }

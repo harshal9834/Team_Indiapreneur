@@ -11,8 +11,9 @@ MONGODB_URI = os.environ.get("MONGODB_URI", "mongodb+srv://mahajanharshal36_db_u
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "your-super-secret-key-change-this-in-production")
 JWT_ACCESS_TOKEN_EXPIRES = 15 * 60  # 15 minutes in seconds
 
-# Proxy Configuration (DEPRECATED: Now handled natively)
-NODE_SERVER_URL = os.environ.get("NODE_SERVER_URL", "http://127.0.0.1:5001")
+# CORS Configuration
+# Set this to your Vercel URL in production (e.g. ["https://verionyx.vercel.app"])
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "*").split(",")
 
 # Media Configuration
 ALLOWED_TYPES = {

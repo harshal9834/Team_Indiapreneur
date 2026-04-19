@@ -221,11 +221,9 @@
         <a href="/" class="back-link">← Return to dashboard</a>
     </div>
 
+    <script src="static/js/config.js"></script>
     <script src="static/js/auth.js"></script>
     <script>
-        // Ensure API_BASE_URL is defined if auth.js is loaded
-        const BASE_URL = window.location.origin;
-
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -238,7 +236,7 @@
             errorMsg.style.display = 'none';
 
             try {
-                const response = await fetch(`${BASE_URL}/api/auth/login`, {
+                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })

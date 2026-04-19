@@ -1,5 +1,4 @@
-// API Configuration
-const API_BASE_URL = window.location.origin;
+// API Configuration is handled by config.js
 
 // Auth state management for vanilla JS dashboard
 const Auth = {
