@@ -1,17 +1,21 @@
 flask
 flask-cors
+flask-jwt-extended
+# CPU-only torch (much smaller, no CUDA needed on server)
+--extra-index-url https://download.pytorch.org/whl/cpu
 torch
 torchvision
 transformers
-opencv-python
+# Headless OpenCV (no GUI libs needed on server)
+opencv-python-headless
 numpy
 pillow
 librosa
 static-ffmpeg
 fpdf
-flask-jwt-extended
 pymongo
 dnspython
 bcrypt
 gunicorn
 python-dotenv
+requests
