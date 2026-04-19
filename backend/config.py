@@ -1,4 +1,16 @@
 import os
+from pathlib import Path
+
+# Load .env file if it exists (local development)
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent / ".env"
+    if env_path.exists():
+        load_dotenv(dotenv_path=env_path)
+        print("[Verionyx AI] Loaded .env file from backend/")
+except ImportError:
+    pass  # python-dotenv not installed, use system env vars (production)
+
 
 # Server Configuration
 PORT = 5000

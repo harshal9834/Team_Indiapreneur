@@ -34,3 +34,12 @@ Thumbs.db
 # report.csv
 # report.pdf
 # forensic_report_*.pdf
+
+# Environment Variables (NEVER commit these)
+.env
+*.env
+backend/.env
+jwt-auth-system/.env
+
+# Temp/Cache
+DeepfakeDetector_Temp/
